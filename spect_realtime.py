@@ -11,7 +11,7 @@ N_FFT = 4096
 SCREEN_WIDTH = 178
 ENERGY_THRESHOLD = 0.4
 
-# Choose the frequency range of your log-spectrogram.
+#frequency range of log-spectrogram.
 F_LO = librosa.note_to_hz('C2')
 F_HI = librosa.note_to_hz('C9')
 M = librosa.filters.mel(RATE, N_FFT, SCREEN_WIDTH, fmin=F_LO, fmax=F_HI)
@@ -19,10 +19,6 @@ M = librosa.filters.mel(RATE, N_FFT, SCREEN_WIDTH, fmin=F_LO, fmax=F_HI)
 p = pyaudio.PyAudio()
 
 def generate_string_from_audio(audio_data):
-    """
-    This function takes one audio buffer as a numpy array and returns a
-    string to be printed to the terminal.
-    """
     # Compute real FFT.
     x_fft = numpy.fft.rfft(audio_data, n=N_FFT)
 
@@ -34,15 +30,12 @@ def generate_string_from_audio(audio_data):
 
     for i in range(SCREEN_WIDTH):
 
-        # If there is energy in this frequency bin, display an asterisk.
         if melspectrum[i] > ENERGY_THRESHOLD:
             char_list[i] = '*'
-
-        # Draw frequency axis guidelines.
+            
         elif i % 30 == 29:
             char_list[i] = '|'
 
-    # Return string.
     return ''.join(char_list)
 
 def callback(in_data, frame_count, time_info, status):
